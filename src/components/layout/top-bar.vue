@@ -1,6 +1,6 @@
 <template>
   <section
-    class="top_bar py-[10px] px-[25px] bg-[#fff] border flex justify-between items-center flex-row gap-3 fixed top-0 right-0"
+    class="top_bar py-[10px] px-[25px] bg-[#fff] border flex justify-between items-center flex-row gap-3 fixed top-0 right-0 z-50"
   >
     <div class="flex justify-start items-center flex-row">
       <v-menu transition="slide-x-transition">

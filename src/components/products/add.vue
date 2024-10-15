@@ -13,7 +13,7 @@
       <v-text-field
         density="comfortable"
         placeholder="Title"
-        prepend-inner-icon="mdi-account-circle-outline"
+        prepend-inner-icon="mdi-store-outline"
         variant="outlined"
         class="w-full"
         v-model="productDATA.title"
@@ -24,7 +24,7 @@
       <v-text-field
         density="comfortable"
         placeholder="Description"
-        prepend-inner-icon="mdi-account-circle-outline"
+        prepend-inner-icon="mdi-store-outline"
         variant="outlined"
         class="w-full"
         v-model="productDATA.description"
@@ -35,7 +35,7 @@
       <v-text-field
         density="comfortable"
         placeholder="Price"
-        prepend-inner-icon="mdi-account-circle-outline"
+        prepend-inner-icon="mdi-store-outline"
         variant="outlined"
         class="w-full"
         v-model="productDATA.price"

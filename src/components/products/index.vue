@@ -25,7 +25,7 @@
             stroke-linejoin="round"
           />
         </svg>
-        <span class="text-light-color text-[15px] font-medium">
+        <span class="text-[#fff] text-[15px] font-medium">
           Add Product
         </span>
       </router-link>
