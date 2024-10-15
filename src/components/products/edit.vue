@@ -1,6 +1,6 @@
 <template>
   <section
-    class="products__layout pt-[30px] lg:px-[40px] w-full flex justify-start items-start flex-col gap-10"
+    class="products__layout py-[30px] lg:px-[40px] w-full flex justify-start items-start flex-col gap-10 bg-[#fff] rounded-[12px] border"
   >
     <div
       class="pb-5 border-b border-solid border-[#ccc] w-full flex justify-between items-center flex-row flex-wrap gap-3"
@@ -8,7 +8,7 @@
       <h3 class="text-second-color font-semibold text-[20px]">Add product</h3>
     </div>
     <div
-      class="flex justify-start items-start flex-col gap-3 w-full bg-[#fff] shadow-md sm:p-[32px] px-[12px] py-[25px] rounded-[8px]"
+      class="flex justify-start items-start flex-col gap-3 w-full sm:p-[32px] px-[12px] py-[25px]"
     >
       <v-text-field
         density="comfortable"
@@ -16,7 +16,7 @@
         prepend-inner-icon="mdi-account-circle-outline"
         variant="outlined"
         class="w-full"
-        v-model="productDATA.title"
+        v-model="Getproduct.title"
         :error-messages="product$.title.$errors.map((e) => e.$message)"
         @blur="product$.title.$touch"
         @input="product$.title.$touch"
@@ -27,7 +27,7 @@
         prepend-inner-icon="mdi-account-circle-outline"
         variant="outlined"
         class="w-full"
-        v-model="productDATA.description"
+        v-model="Getproduct.description"
         :error-messages="product$.description.$errors.map((e) => e.$message)"
         @blur="product$.description.$touch"
         @input="product$.description.$touch"
@@ -38,7 +38,7 @@
         prepend-inner-icon="mdi-account-circle-outline"
         variant="outlined"
         class="w-full"
-        v-model="productDATA.price"
+        v-model="Getproduct.price"
         :error-messages="product$.price.$errors.map((e) => e.$message)"
         @blur="product$.price.$touch"
         @input="product$.price.$touch"
@@ -49,8 +49,10 @@
         variant="outlined"
         density="comfortable"
         label="Category"
-        :items="['getCategories', 'hkgg']"
-        v-model="productDATA.category"
+        :items="getcategories"
+        :item-title="(type) => type.name"
+        :item-value="(type) => type.name"
+        v-model="Getproduct.category"
         :error-messages="product$.category.$errors.map((e) => e.$message)"
         @blur="product$.category.$touch"
         @input="product$.category.$touch"
@@ -59,6 +61,7 @@
         <span for="" class="font-semibold text-[15px]">
           Product image
         </span>
+        <img :src="Getproduct.image" :alt="Getproduct.title" class="rounded-[8px] w-[100px] h-[100px] object-contain" >
         <div
           class="file__zone flex justify-center items-center flex-column my-3 w-100"
           style="gap: 8px"
@@ -68,7 +71,7 @@
             type="file"
             id="formFile"
             @change="onImageProductChange0"
-            accept=".png, .jpg, .jpeg, .pdf"
+            accept=".png, .jpg, .jpeg"
           />
 
           <div
@@ -82,17 +85,17 @@
               height="150"
             />
           </div>
-          <!-- <img
+          <img
             v-else
             src="/images/down.svg"
             alt="download"
             loading="lazy"
             width="40"
             height="40"
-          /> -->
+          />
 
-          <span> Drag image </span>
-          <p>png, jpg, jpeg, pdf</p>
+          <span> Upload image </span>
+          <p>png, jpg, jpeg</p>
         </div>
 
         <!-- Error message -->
@@ -113,6 +116,7 @@
 
 <script setup>
 import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { useToast } from "vue-toastification";
 import { useStore } from "vuex";
 import { ref, computed, reactive } from "vue";
@@ -126,6 +130,7 @@ import {
   maxLength,
 } from "@vuelidate/validators";
 const router = useRouter();
+const route = useRoute();
 const store = useStore();
 const toast = useToast();
 const loading = ref(false);
@@ -135,6 +140,17 @@ const productDATA = ref({
   price: "",
   category: null
 });
+
+//////////////////////////
+// Get categories
+const getcategories = computed(() => store.getters["categories/getcategories"]);
+store.dispatch("categories/handleGetcategories");
+
+
+// get product details
+const Getproduct = computed(() => store.getters["products/getProduct"]);
+const getLoading = computed(() => store.getters["products/getLoading"]);
+store.dispatch("products/Getproduct", route.params.id);
 
 //////////////////////////////////////////////////////////////////////////////////
 const ImageProduct0 = ref(null);
@@ -176,47 +192,37 @@ const rules = {
   }
 };
 
-// const productPAYLOAD = computed(() => {
-//   const PAYLOAD = {
-//     title: productDATA.title,
-//     description: productDATA.description,
-//     price: productDATA.price,
-//     category: productDATA.category,
-//     image: productDATA.image,
-//   };
-//   return PAYLOAD;
-// });
-
-const product$ = useVuelidate(rules, productDATA);
+const product$ = useVuelidate(rules, Getproduct);
 
 const submit = async () => {
   loading.value = false;
+  
   try {
-    if (ImageProduct0.value == null) {
-      messageFile.value = true;
-      return;
-    } else {
-      messageFile.value = false;
-    }
     const validateForm = await product$.value.$validate();
     if (validateForm) {
       loading.value = true;
       const form_data = new FormData();
-      form_data.append("title", productDATA.value.title);
-      form_data.append("description", productDATA.value.description);
-      form_data.append("price", productDATA.value.price);
-      form_data.append("category", productDATA.value.category);
+      form_data.append("title", Getproduct.value.title);
+      form_data.append("description", Getproduct.value.description);
+      form_data.append("price", Getproduct.value.price);
+      form_data.append("category", Getproduct.value.category);
       form_data.append("image", ImageProduct0.value);
-      await store.dispatch("products/handleAddproduct", form_data);
-      toast.success("product Added successfully");
+      await store.dispatch("products/editproduct",{
+            productID: route.params.id,
+            payload: form_data
+          });
+      toast.success("Product edited successfully");
       router.push("/products");
     }
   } catch (error) {
-    toast.error("Something is error");
+    toast.error("Something went wrong");
   } finally {
     loading.value = false;
   }
 };
+
+
+
 
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <section
-    class="products__layout pt-[30px] lg:px-[40px] w-full flex justify-start items-start flex-col gap-10"
+    class="products__layout py-[30px] lg:px-[40px] w-full flex justify-start items-start flex-col gap-10 bg-[#fff] rounded-[12px] border"
   >
     <div
       class="pb-5 border-b border-solid border-[#ccc] w-full flex justify-between items-center flex-row flex-wrap gap-3"
@@ -8,7 +8,7 @@
       <h3 class="text-second-color font-semibold text-[20px]">Add product</h3>
     </div>
     <div
-      class="flex justify-start items-start flex-col gap-3 w-full bg-[#fff] shadow-md sm:p-[32px] px-[12px] py-[25px] rounded-[8px]"
+      class="flex justify-start items-start flex-col gap-3 w-full sm:p-[32px] px-[12px] py-[25px]"
     >
       <v-text-field
         density="comfortable"
@@ -70,7 +70,7 @@
             type="file"
             id="formFile"
             @change="onImageProductChange0"
-            accept=".png, .jpg, .jpeg, .pdf"
+            accept=".png, .jpg, .jpeg"
           />
 
           <div
@@ -84,17 +84,17 @@
               height="150"
             />
           </div>
-          <!-- <img
+          <img
             v-else
             src="/images/down.svg"
             alt="download"
             loading="lazy"
             width="40"
             height="40"
-          /> -->
+          />
 
-          <span> Drag image </span>
-          <p>png, jpg, jpeg, pdf</p>
+          <span> Upload image </span>
+          <p>png, jpg, jpeg</p>
         </div>
 
         <!-- Error message -->
@@ -178,47 +178,38 @@ const rules = {
   }
 };
 
-// const productPAYLOAD = computed(() => {
-//   const PAYLOAD = {
-//     title: productDATA.title,
-//     description: productDATA.description,
-//     price: productDATA.price,
-//     category: productDATA.category,
-//     image: productDATA.image,
-//   };
-//   return PAYLOAD;
-// });
-
 const product$ = useVuelidate(rules, productDATA);
 
 const submit = async () => {
   loading.value = false;
+  
   try {
-    if (ImageProduct0.value == null) {
-      messageFile.value = true;
-      return;
+    const validateForm = await product$.value.$validate();
+    if (ImageProduct0.value == null || !validateForm) {
+      messageFile.value = (ImageProduct0.value == null); 
+      return; 
     } else {
       messageFile.value = false;
     }
-    const validateForm = await product$.value.$validate();
-    if (validateForm) {
-      loading.value = true;
-      const form_data = new FormData();
-      form_data.append("title", productDATA.value.title);
-      form_data.append("description", productDATA.value.description);
-      form_data.append("price", productDATA.value.price);
-      form_data.append("category", productDATA.value.category);
-      form_data.append("image", ImageProduct0.value);
-      await store.dispatch("products/handleAddproduct", form_data);
-      toast.success("product Added successfully");
-      router.push("/products");
-    }
+    loading.value = true;
+    const form_data = new FormData();
+    form_data.append("title", productDATA.value.title);
+    form_data.append("description", productDATA.value.description);
+    form_data.append("price", productDATA.value.price);
+    form_data.append("category", productDATA.value.category);
+    form_data.append("image", ImageProduct0.value);
+    await store.dispatch("products/handleAddproduct", form_data);
+    toast.success("Product added successfully");
+    router.push("/products");
   } catch (error) {
-    toast.error("Something is error");
+    toast.error("Something went wrong");
   } finally {
     loading.value = false;
   }
 };
+
+
+
 //////////////////////////
 // Get categories
 const getcategories = computed(() => store.getters["categories/getcategories"]);
