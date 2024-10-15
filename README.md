@@ -10,6 +10,13 @@ This template should help get you started developing with Vue 3 in Vite.
 
 See [Vite Configuration Reference](https://vitejs.dev/config/).
 
+### Installation
+
+### Clone the Repository
+```bash
+git clone https://github.com/ahmedyousry74/velents-task
+
+
 ## Project Setup
 
 ```sh
