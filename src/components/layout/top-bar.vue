@@ -20,7 +20,7 @@
             </router-link>
           </v-list-item>
           <v-list-item>
-            <button class="text-[#c62f2f] font-medium text-[14px]">
+            <button class="text-[#c62f2f] font-medium text-[14px]" @click="handleLogout">
               LOGOUT
             </button>
           </v-list-item>
@@ -86,15 +86,18 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useToast } from "vue-toastification";
+import { useStore } from "vuex";
+import { ref, computed, reactive } from "vue";
+const router = useRouter();
+const store = useStore();
+const toast = useToast();
 
-
-const items = [
-  { title: "Click Me" },
-  { title: "Click Me" },
-  { title: "Click Me" },
-  { title: "Click Me 2" },
-];
+const handleLogout = async () => {
+  store.dispatch("auth/handlelogout");
+  location.reload();
+};
 </script>
 
 <style lang="scss" scoped>

@@ -27,3 +27,10 @@ npm run dev
 ```sh
 npm run build
 ```
+
+
+### Using FakeApi from "https://fakestoreapi.com/docs"
+
+```sh
+npm run build
+```
