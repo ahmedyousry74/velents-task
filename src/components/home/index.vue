@@ -85,27 +85,7 @@
         :items="lastproductsData"
         hide-default-footer
       >
-        <template v-slot:item.status="{ item }">
-          <v-chip
-            class="ma-2"
-            color="#f694a2"
-            v-if="item.status == 'not active'"
-          >
-            <v-icon class="!text-xs mx-1 text-[#E02D3C]"> mdi-circle </v-icon>
-            <span class="text-[#E02D3C] !font-medium">
-              {{ item.status }}
-            </span>
-          </v-chip>
-          <v-chip
-            class="ma-2 text-white !bg-[#FDECEC]"
-            v-if="item.status == 'active'"
-          >
-            <v-icon class="!text-xs mx-1 text-[#027A48]"> mdi-circle </v-icon>
-            <span class="text-[#027A48] font-medium">
-              {{ item.status }}
-            </span>
-          </v-chip>
-        </template>
+        
       </v-data-table-server>
     </v-col>
     <v-col cols="12" md="6" class="sm:mt-[32px] mt-[20px]">
@@ -151,40 +131,35 @@ const lastproducts = ref([
     sortable: false,
     key: "id",
   },
-  { title: "Name", key: "name", align: "start" },
-  { title: "Email", key: "email", align: "start" },
-  { title: "Phone", key: "phone", align: "start" },
-  { title: "Status", key: "status", align: "start" }
+  { title: "name", key: "name", align: "start" },
+  { title: "price", key: "price", align: "start" },
+  { title: "quantity", key: "quantity", align: "start" },
 ]);
 
 const lastproductsData = ref([
   {
     id: "1",
-    name: "ahmed",
-    email: "ahmedyousry@gmail.com",
-    phone: "01234756789",
-    status: "active",
+    name: "product1",
+    price: "15.48",
+    quantity: "18",
   },
   {
-    name: "adel",
-    email: "adel@gmail.com",
-    phone: "02123456789",
-    status: "not active",
+    id: "2",
+    name: "product2",
+    price: "15.48",
+    quantity: "80",
+  },
+  {
     id: "3",
+    name: "product3",
+    price: "15.48",
+    quantity: "100",
   },
   {
-    name: "omar",
-    email: "omar@gmail.com",
-    phone: "01884874701",
-    status: "not active",
     id: "4",
-  },
-  {
-    id: "6",
-    name: "waleed",
-    email: "waleed@gmail.com",
-    phone: "01234567811",
-    status: "not active",
+    name: "product4",
+    price: "15.48",
+    quantity: "180",
   },
 ]);
 
@@ -206,28 +181,28 @@ const lastOrders = ref([
 const lastOrdersData = ref([
   {
     id: "1",
-    name: "ahmed",
+    name: "order 1",
     order_id: "1545",
     price: "850",
     status: "complete",
   },
   {
     id: "2",
-    name: "ahmed",
+    name: "order 2",
     order_id: "1505",
     price: "100",
     status: "pending",
   },
   {
     id: "3",
-    name: "ahmed",
+    name: "order 3",
     order_id: "1508",
     price: "8550",
     status: "complete",
   },
   {
     id: "4",
-    name: "ahmed",
+    name: "order 4",
     order_id: "1530",
     price: "7150",
     status: "pending",

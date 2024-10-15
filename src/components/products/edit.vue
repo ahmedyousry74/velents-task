@@ -108,7 +108,7 @@
         class="!bg-dark-color font-medium text-[15px] !text-light-color !h-[42px] !shadow-none mb-5 !tracking-[0]"
         :loading="loading"
       >
-        Add product
+        Edit product
       </v-btn>
     </div>
   </section>

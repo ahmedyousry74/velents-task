@@ -27,10 +27,10 @@ import Topbar from "./components/layout/top-bar.vue";
   width: 100% !important;
   main {
     flex: 1 1 0;
-    padding: 2rem;
+    // padding: 2rem;
     width: 100%;
     @media (max-width: 1024px) {
-      padding: 20px !important;
+      // padding: 20px !important;
     }
   }
   .wrap__content {
