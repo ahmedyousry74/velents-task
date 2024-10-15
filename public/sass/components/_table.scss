@@ -1,0 +1,35 @@
+.products__layout{
+    .v-table{
+        .v-table__wrapper{
+            border-radius: 8px;
+        }
+        thead{
+            border-bottom: 0 !important;
+            tr{
+                background: #F9FAFB !important;
+                color: #222 !important;
+                border: 0 !important;
+                border-bottom: 0 !important;
+            }
+            th{
+                border-bottom: 0 !important;
+            }
+        }
+        tbody{
+            border-top: 0 !important;
+            tr{
+                border-top: 0 !important;
+                &:nth-child(even){
+                    background-color: #e4e1e142;
+                }
+            }
+        }
+    }
+    tr:not(:last-child) > td, .v-table .v-table__wrapper > table > tbody > tr:not(:last-child) > th {
+        border-bottom: thin solid rgb(188 188 188 / 12%) !important;
+    }
+}
+
+.v-field__outline__end,.v-field__outline__start,.v-field--variant-outlined .v-field__outline__notch::before,.v-field--variant-outlined .v-field__outline__notch::after{
+    border-color: #ccc !important;
+}
