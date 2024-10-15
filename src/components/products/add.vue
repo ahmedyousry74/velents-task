@@ -49,7 +49,9 @@
         variant="outlined"
         density="comfortable"
         label="Category"
-        :items="['getCategories', 'hkgg']"
+        :items="getcategories"
+        :item-title="(type) => type.name"
+        :item-value="(type) => type.name"
         v-model="productDATA.category"
         :error-messages="product$.category.$errors.map((e) => e.$message)"
         @blur="product$.category.$touch"
@@ -217,7 +219,10 @@ const submit = async () => {
     loading.value = false;
   }
 };
-
+//////////////////////////
+// Get categories
+const getcategories = computed(() => store.getters["categories/getcategories"]);
+store.dispatch("categories/handleGetcategories");
 </script>
 
 <style lang="scss" scoped></style>
