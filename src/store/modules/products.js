@@ -28,7 +28,7 @@ const actions = {
     async handleGetproducts({ commit }) {
         commit('SET_LOADING', true);
         try {
-            const res = await axios.get('products?limit=21', { params: { ...state.filter } });
+            const res = await axios.get('products', { params: { ...state.filter } });
             commit('SET_PRODUCTS', res.data)
         } catch (error) {
         } finally {

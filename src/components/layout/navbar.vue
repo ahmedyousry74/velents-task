@@ -142,6 +142,7 @@ aside {
   min-height: 100%;
   padding: 1rem;
   transition: 0.2s ease-in-out;
+  position: fixed;
   .flex {
     flex: 1 1 0%;
   }

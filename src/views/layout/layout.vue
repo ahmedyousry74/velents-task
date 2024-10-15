@@ -3,7 +3,7 @@
     <Navbar />
     <topBar />
   </div>
-  <div class="w-full px-5 overflow-x-scroll"><slot /></div>
+  <div class="w-full ps-[80px] pe-5 overflow-x-scroll"><slot /></div>
 </template>
 
 <script setup>

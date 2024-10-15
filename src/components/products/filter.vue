@@ -2,23 +2,14 @@
   <div
     class="flex justify-start items-start flex-row flex-wrap gap-3 w-full bg-[#fff]"
   >
-    <v-text-field
-      hide-details
-      max-width="250"
-      placeholder="Search"
-      variant="outlined"
-      density="compact"
-      v-model="filter.search"
-      @input="handleproducts"
-    ></v-text-field>
     <v-autocomplete
-      v-model="filter.status"
+      v-model="filter.sort"
       class="!w-[250px]"
       density="compact"
       max-width="250"
       clearable
       chips
-      label="Status"
+      label="Sort"
       :items="statusMenu"
       variant="outlined"
       hide-details
@@ -35,15 +26,14 @@ const store = useStore();
 // filter
 const filter = reactive({
   search: "",
-  status: null,
+  sort: null,
 });
 
 const productsPAYLOAD = computed(() => {
   const payload = {
-    name: filter.search,
-    status: filter.status,
+    title: filter.search,
+    sort: filter.sort,
   };
-
   return { ...payload };
 });
 
@@ -56,12 +46,12 @@ const handleproducts = () => {
 // status
 const statusMenu = ref([
   {
-    title: "active",
-    value: "active",
+    title: "asc",
+    value: "asc",
   },
   {
-    title: "not active",
-    value: "not active",
+    title: "desc",
+    value: "desc",
   },
 ]);
 </script>
