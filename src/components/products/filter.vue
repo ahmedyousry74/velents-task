@@ -25,13 +25,11 @@ const store = useStore();
 
 // filter
 const filter = reactive({
-  search: "",
   sort: null,
 });
 
 const productsPAYLOAD = computed(() => {
   const payload = {
-    title: filter.search,
     sort: filter.sort,
   };
   return { ...payload };

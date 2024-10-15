@@ -1,6 +1,6 @@
 <template>
   <section
-    class="products__layout py-[30px] lg:px-[40px] w-full flex justify-start items-start flex-col gap-10 bg-[#fff] rounded-[12px] border"
+    class="products__layout mb-10 py-[30px] lg:px-[40px] w-full flex justify-start items-start flex-col gap-10 bg-[#fff] rounded-[12px] border"
   >
     <div
       class="pb-5 border-b border-solid border-[#ccc] w-full flex justify-between items-center flex-row flex-wrap gap-3"

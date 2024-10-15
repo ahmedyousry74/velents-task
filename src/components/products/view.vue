@@ -13,7 +13,7 @@
     <section v-else>
       <div
       v-if="Getproduct !== ''"
-        class="product__details py-[30px] lg:px-[40px] px-[24px] w-full flex justify-start items-start flex-col gap-4 bg-[#fff] border rounded-[8px] h-[100vh]"
+        class="product__details mb-10 py-[30px] lg:px-[40px] px-[24px] w-full flex justify-start items-start flex-col gap-4 bg-[#fff] border rounded-[8px]"
       >
         <div
           class="flex justify-between items-center flex-row gap-3 w-full border-b pb-3 flex-wrap"
