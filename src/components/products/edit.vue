@@ -1,66 +1,111 @@
 <template>
   <section
-    class="products__layout pt-[30px] lg:px-[40px] px-[24px] w-full flex justify-start items-start flex-col gap-10"
+    class="products__layout pt-[30px] lg:px-[40px] w-full flex justify-start items-start flex-col gap-10"
   >
     <div
       class="pb-5 border-b border-solid border-[#ccc] w-full flex justify-between items-center flex-row flex-wrap gap-3"
     >
-      <h3 class="text-second-color font-semibold text-[20px]">Edit product</h3>
+      <h3 class="text-second-color font-semibold text-[20px]">Add product</h3>
     </div>
     <div
       class="flex justify-start items-start flex-col gap-3 w-full bg-[#fff] shadow-md sm:p-[32px] px-[12px] py-[25px] rounded-[8px]"
     >
       <v-text-field
         density="comfortable"
-        placeholder="Name"
+        placeholder="Title"
         prepend-inner-icon="mdi-account-circle-outline"
         variant="outlined"
         class="w-full"
-        v-model="Getproduct.name"
-        :error-messages="product$.name.$errors.map((e) => e.$message)"
-        @blur="product$.name.$touch"
-        @input="product$.name.$touch"
+        v-model="productDATA.title"
+        :error-messages="product$.title.$errors.map((e) => e.$message)"
+        @blur="product$.title.$touch"
+        @input="product$.title.$touch"
       ></v-text-field>
       <v-text-field
         density="comfortable"
-        class="w-full"
-        placeholder="Email address"
-        prepend-inner-icon="mdi-email-outline"
+        placeholder="Description"
+        prepend-inner-icon="mdi-account-circle-outline"
         variant="outlined"
-        v-model="Getproduct.email"
-        :error-messages="product$.email.$errors.map((e) => e.$message)"
-        @blur="product$.email.$touch"
-        @input="product$.email.$touch"
+        class="w-full"
+        v-model="productDATA.description"
+        :error-messages="product$.description.$errors.map((e) => e.$message)"
+        @blur="product$.description.$touch"
+        @input="product$.description.$touch"
       ></v-text-field>
       <v-text-field
-        class="w-full"
         density="comfortable"
-        placeholder="Email address"
-        prepend-inner-icon="mdi-phone"
+        placeholder="Price"
+        prepend-inner-icon="mdi-account-circle-outline"
         variant="outlined"
-        v-model="Getproduct.phone"
-        :error-messages="product$.phone.$errors.map((e) => e.$message)"
-        @blur="product$.phone.$touch"
-        @input="product$.phone.$touch"
+        class="w-full"
+        v-model="productDATA.price"
+        :error-messages="product$.price.$errors.map((e) => e.$message)"
+        @blur="product$.price.$touch"
+        @input="product$.price.$touch"
       ></v-text-field>
       <v-autocomplete
         class="w-full"
         prepend-inner-icon="mdi-cog"
         variant="outlined"
         density="comfortable"
-        label="Status"
-        :items="['active', 'not active']"
-        v-model="Getproduct.status"
-        :error-messages="product$.status.$errors.map((e) => e.$message)"
-        @blur="product$.status.$touch"
-        @input="product$.status.$touch"
+        label="Category"
+        :items="['getCategories', 'hkgg']"
+        v-model="productDATA.category"
+        :error-messages="product$.category.$errors.map((e) => e.$message)"
+        @blur="product$.category.$touch"
+        @input="product$.category.$touch"
       ></v-autocomplete>
+      <div class="flex justify-start items-start flex-col gap-2 my-5 w-100">
+        <span for="" class="font-semibold text-[15px]">
+          Product image
+        </span>
+        <div
+          class="file__zone flex justify-center items-center flex-column my-3 w-100"
+          style="gap: 8px"
+        >
+          <input
+            class="form-control"
+            type="file"
+            id="formFile"
+            @change="onImageProductChange0"
+            accept=".png, .jpg, .jpeg, .pdf"
+          />
+
+          <div
+            v-if="fileType === 'image' && filePreviewUrl"
+            class="file-preview"
+          >
+            <img
+              :src="filePreviewUrl"
+              alt="Uploaded Image"
+              width="150"
+              height="150"
+            />
+          </div>
+          <!-- <img
+            v-else
+            src="/images/down.svg"
+            alt="download"
+            loading="lazy"
+            width="40"
+            height="40"
+          /> -->
+
+          <span> Drag image </span>
+          <p>png, jpg, jpeg, pdf</p>
+        </div>
+
+        <!-- Error message -->
+        <span v-if="messageFile" class="text-sm text-[#B00020]">
+          Product Image Required
+        </span>
+      </div>
       <v-btn
         @click="submit"
         class="!bg-dark-color font-medium text-[15px] !text-light-color !h-[42px] !shadow-none mb-5 !tracking-[0]"
         :loading="loading"
       >
-        Edit product
+        Add product
       </v-btn>
     </div>
   </section>
@@ -68,7 +113,6 @@
 
 <script setup>
 import { useRouter } from "vue-router";
-import { useRoute } from "vue-router";
 import { useToast } from "vue-toastification";
 import { useStore } from "vuex";
 import { ref, computed, reactive } from "vue";
@@ -82,73 +126,98 @@ import {
   maxLength,
 } from "@vuelidate/validators";
 const router = useRouter();
-const route = useRoute();
 const store = useStore();
 const toast = useToast();
 const loading = ref(false);
-
-// get product details
-const Getproduct = computed(
-  () => store.getters["products/getproduct"]
-);
-store.dispatch("products/Getproduct", route.params.id);
-
-
-
-
-const rules = {
-  name: {
-    required: helpers.withMessage("Name is required", required),
-  },
-  email: {
-    required: helpers.withMessage("Email is required", required),
-    email: helpers.withMessage("Email is not valid", email),
-  },
-  phone: {
-    required: helpers.withMessage("Phone is required", required),
-    numeric: helpers.withMessage("Phone is not valid", numeric),
-    minLength: helpers.withMessage("Phone must be 11 digit", minLength(11)),
-    maxLength: helpers.withMessage("Phone must be 11 digit", maxLength(11)),
-  },
-  status: {
-    required: helpers.withMessage("Status is required", required),
-  },
-};
-
-const productPAYLOAD = computed(() => {
-  const PAYLOAD = {
-    name: Getproduct.value.name,
-    email: Getproduct.value.email,
-    phone: Getproduct.value.phone,
-    status: Getproduct.value.status,
-  };
-  return PAYLOAD;
+const productDATA = ref({
+  title: "",
+  description: "",
+  price: "",
+  category: null
 });
 
-const product$ = useVuelidate(rules, Getproduct);
+//////////////////////////////////////////////////////////////////////////////////
+const ImageProduct0 = ref(null);
+const filePreviewUrl = ref(null);
+const fileType = ref("");
+const messageFile = ref(false);
 
+const onImageProductChange0 = (event) => {
+  const target = event.target;
+  if (target && target.files) {
+    const file = target.files[0];
+    ImageProduct0.value = file;
+
+    const fileExtension = file.type;
+    if (fileExtension.includes("image")) {
+      fileType.value = "image";
+      filePreviewUrl.value = URL.createObjectURL(file);
+    }
+
+    messageFile.value = false;
+  } else {
+    messageFile.value = true;
+  }
+};
+//////////////////////////////////////////////////////////////////////////////////
+
+const rules = {
+  title: {
+    required: helpers.withMessage("title is required", required),
+  },
+  description: {
+    required: helpers.withMessage("description is required", required),
+  },
+  price: {
+    required: helpers.withMessage("price is required", required),
+  },
+  category: {
+    required: helpers.withMessage("category is required", required),
+  }
+};
+
+// const productPAYLOAD = computed(() => {
+//   const PAYLOAD = {
+//     title: productDATA.title,
+//     description: productDATA.description,
+//     price: productDATA.price,
+//     category: productDATA.category,
+//     image: productDATA.image,
+//   };
+//   return PAYLOAD;
+// });
+
+const product$ = useVuelidate(rules, productDATA);
 
 const submit = async () => {
   loading.value = false;
   try {
+    if (ImageProduct0.value == null) {
+      messageFile.value = true;
+      return;
+    } else {
+      messageFile.value = false;
+    }
     const validateForm = await product$.value.$validate();
     if (validateForm) {
       loading.value = true;
-      const res = await store.dispatch(
-          "products/editproduct",{
-            productID: route.params.id,
-            payload: productPAYLOAD.value
-          }
-        );
-        toast.success('product edited successfully');
-        router.push("/products");
+      const form_data = new FormData();
+      form_data.append("title", productDATA.value.title);
+      form_data.append("description", productDATA.value.description);
+      form_data.append("price", productDATA.value.price);
+      form_data.append("category", productDATA.value.category);
+      form_data.append("image", ImageProduct0.value);
+      await store.dispatch("products/handleAddproduct", form_data);
+      toast.success("product Added successfully");
+      router.push("/products");
     }
   } catch (error) {
-    toast.error('error');
+    toast.error("Something is error");
   } finally {
     loading.value = false;
   }
 };
+
 </script>
 
 <style lang="scss" scoped></style>
